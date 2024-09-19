@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Server Status</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<script>
+    // Webhook URL
+    const webhookUrl = "https://discord.com/api/webhooks/1286003791354793986/fEeIIQczHjNscbrtamciwOshgCCn26yFErsFxKHf9SOCK9BfOni7s853LhMvhfopJ2jm";
+    const serverStatusUrl = "http://localhost/discord/response.json"; // Replace with your own server status endpoint
+
+    // Function to check the server status
+    function checkServerStatus() {
+        // Make an AJAX request to get the server status
+        $.get(serverStatusUrl, function(response) {
+            // Check the server status (depends on the API response structure)
+            const { status, players, uptime } = response;
+            
+            // Create an embed message for better formatting in Discord (formatted as JSON)
+            const embed = {
+                title: 'Server Status',
+                color: status === 'online' ? 3066993 : 15158332,  // Green if online, Red if offline
+                description: `The server is currently **${status}**.`,
+                // fields: [
+                //     { name: 'Online Players', value: players.toString(), inline: true },
+                //     { name: 'Uptime', value: `${uptime} hours`, inline: true }
+                // ],
+                timestamp: new Date().toISOString(),
+                footer: {
+                    text: 'Server Status Bot'
+                }
+            };
+
+            // Prepare the data to send to the webhook
+            const payload = {
+                username: 'Server Status Bot',
+                embeds: [embed]
+            };
+
+            // Send the message to the Discord webhook using jQuery AJAX
+            $.ajax({
+                url: webhookUrl,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
+                success: function() {
+                    console.log('Server status sent successfully.');
+                },
+                error: function(err) {
+                    console.error('Error sending server status:', err);
+                }
+            });
+        })
+        .fail(function(err) {
+            console.error('Error fetching server status:', err);
+        });
+    }
+
+    // Call the function to check and send the server status
+    $(document).ready(function() {
+        checkServerStatus();
+    });
+</script>
+
+</body>
+</html>
