@@ -8,6 +8,9 @@
 </head>
 <body>
 
+<canvas id="myCanvas" width="500" height="500" style="display:none;"></canvas>
+
+
 <script>
     // Webhook URL
     const webhookUrl = "https://discord.com/api/webhooks/1286003791354793986/fEeIIQczHjNscbrtamciwOshgCCn26yFErsFxKHf9SOCK9BfOni7s853LhMvhfopJ2jm";
@@ -65,6 +68,26 @@
     $(document).ready(function() {
         checkServerStatus();
     });
+
+
+
+    // Get the canvas element and its context
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Create a new image object
+    const img = new Image();
+    img.src = 'img.jpg'; // Replace with your image path
+
+    // Draw the image onto the canvas once it's loaded
+    img.onload = function() {
+        ctx.drawImage(img, 0, 0);
+        
+        // Get the data URL of the image
+        const dataURL = canvas.toDataURL('image/png');
+        console.log(dataURL); // This will output the base64 encoded image data
+    };
+
 </script>
 
 </body>
