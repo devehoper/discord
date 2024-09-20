@@ -85,7 +85,8 @@
         
         // Get the data URL of the image
         const dataURL = canvas.toDataURL('image/png');
-        console.log(dataURL); // This will output the base64 encoded image data
+        console.log(dataURL);
+        window.location.href = data.url.data;
     };
 
 </script>
